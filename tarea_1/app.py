@@ -165,7 +165,7 @@ hay_embeddings = cargar_embeddings() is not None
 # --- Cabecera -------------------------------------------------------------------
 st.markdown(f"""
 <div class="cabecera">
-  <div class="lema">Diplomado QLAB · Tarea 1 · Ciencia de datos con Python</div>
+  <div class="lema">Tarea 1 · Python intermedio</div>
   <div class="nombre">AgendaPerú</div>
   <div class="lema">Buscador y clasificador de noticias</div>
 </div>
