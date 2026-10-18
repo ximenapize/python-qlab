@@ -1,0 +1,15 @@
+{
+  "acc_adivinar_diario_400": 0.6575,
+  "acc_adivinar_diario_400_std": 0.0269,
+  "acc_adivinar_diario_por_seccion": {
+    "ciencia_tecnologia": 0.69,
+    "deportes": 0.69,
+    "economia": 0.64,
+    "politica": 0.62
+  },
+  "acc_adivinar_diario_ventana": 0.5491,
+  "n_ventana": {
+    "El Comercio": 384,
+    "La Republica": 56
+  }
+}
