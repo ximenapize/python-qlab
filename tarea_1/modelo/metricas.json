@@ -1,0 +1,13 @@
+{
+  "f1_macro_test": 0.9318,
+  "accuracy_test": 0.9333,
+  "f1_macro_zero_shot": 0.5963,
+  "f1_macro_llm_test": 0.9307,
+  "acuerdo_llm_humano": "18/20",
+  "acuerdo_llm_humano_pct": 0.9,
+  "n_train": 280,
+  "n_val": 60,
+  "n_test": 60,
+  "modelo_base": "dccuchile/bert-base-spanish-wwm-cased",
+  "modelo_llm": "qwen2.5:7b"
+}
