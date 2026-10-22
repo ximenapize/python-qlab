@@ -1,0 +1,483 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parte de incendios forestales</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Parte de situación: franja de alerta, cifras grandes en condensada de señalética,
+   mapa operativo oscuro a la izquierda y lectura del distrito a la derecha. */
+:root {
+  --ground: #e7e9ea;
+  --sheet: #f7f8f8;
+  --ink: #1a1e22;
+  --ink-2: #4a5259;
+  --rule: #c9ced2;
+  --alert: #b8141b;
+  --alert-ink: #ffffff;
+  --risk-1: #13318f;
+  --risk-2: #3f68d8;
+  --risk-3: #93acea;
+  --risk-4: #c4ccd8;
+  --cov-bosque: #3d6a4c;
+  --cov-pastizal: #b39d4f;
+  --cov-urbano: #7d838a;
+  --cov-otro: #c3c6c9;
+  /* el mapa es siempre oscuro, como una sala de operaciones */
+  --map-bg: #1c2126;
+  --map-ink: #e6e9ec;
+  --map-ink-2: #9aa4ad;
+  --map-rule: #343b42;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #15181b; --sheet: #1d2125; --ink: #eceef0; --ink-2: #a7afb6;
+    --rule: #353b41; --alert: #c8222a; --alert-ink: #ffffff;
+    --risk-1: #8fb0ff; --risk-2: #5f86f0; --risk-3: #3b5bb4; --risk-4: #46505e;
+    --cov-bosque: #5e9670; --cov-pastizal: #c9b465; --cov-urbano: #9aa0a7; --cov-otro: #4b5056;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #15181b; --sheet: #1d2125; --ink: #eceef0; --ink-2: #a7afb6;
+  --rule: #353b41; --alert: #c8222a; --alert-ink: #ffffff;
+  --risk-1: #8fb0ff; --risk-2: #5f86f0; --risk-3: #3b5bb4; --risk-4: #46505e;
+  --cov-bosque: #5e9670; --cov-pastizal: #c9b465; --cov-urbano: #9aa0a7; --cov-otro: #4b5056;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--ground); color: var(--ink); font: 400 15px/1.5 var(--body); margin: 0; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.05; margin: 0; text-wrap: balance; }
+.num { font-family: var(--display); font-variant-numeric: tabular-nums; }
+
+.alert { background: var(--alert); color: var(--alert-ink); }
+.alert .wrap { display: flex; flex-wrap: wrap; gap: 4px 24px; padding-block: 8px; font-weight: 600; font-size: 14px; }
+.alert strong { font-family: var(--display); font-size: 17px; letter-spacing: .02em; }
+
+header.top { padding-block: 28px 20px; display: grid; gap: 20px; }
+header.top h1 { font-size: clamp(34px, 5vw, 56px); max-width: 22ch; }
+header.top p { margin: 0; max-width: 68ch; color: var(--ink-2); font-size: 17px; }
+
+.totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 3px solid var(--ink); }
+.total { padding: 12px 16px 14px 0; border-right: 1px solid var(--rule); }
+.total + .total { padding-left: 16px; }
+.total:last-child { border-right: 0; }
+.total .num { font-size: clamp(36px, 5vw, 58px); font-weight: 700; line-height: 1; display: block; }
+.total.danger .num { color: var(--alert); }
+.total span.lbl { display: block; margin-top: 6px; font-size: 14px; color: var(--ink-2); max-width: 26ch; }
+
+.tabs { display: flex; flex-wrap: wrap; margin-top: 28px; border-bottom: 1px solid var(--rule); }
+.tab { appearance: none; border: 0; background: transparent; color: var(--ink-2); font: 600 15px/1.2 var(--body); padding: 10px 14px 9px; border-bottom: 3px solid transparent; cursor: pointer; text-align: left; }
+.tab .rk { font-family: var(--display); font-size: 13px; color: var(--ink-2); display: block; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--alert); }
+.tab:disabled { cursor: default; opacity: .55; }
+.tab:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--risk-2); outline-offset: 2px; }
+
+.board { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); background: var(--sheet); border: 1px solid var(--rule); border-top: 0; }
+.mapcol { position: relative; min-width: 0; background: var(--map-bg); color: var(--map-ink); }
+#map { position: relative; height: 640px; background: var(--map-bg); overflow: hidden; }
+.mapbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; padding: 10px 14px; border-top: 1px solid var(--map-rule); font-size: 14px; }
+.mapbar label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.views { margin-left: auto; display: inline-flex; border: 1px solid var(--map-rule); border-radius: 2px; }
+.view { appearance: none; border: 0; background: transparent; color: var(--map-ink-2); font: 600 13px/1 var(--body); padding: 7px 10px; cursor: pointer; }
+.view + .view { border-left: 1px solid var(--map-rule); }
+.view[aria-pressed="true"] { background: var(--map-ink); color: var(--map-bg); }
+.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 4px 14px; padding: 10px 14px 14px; border-top: 1px solid var(--map-rule); font-size: 13px; color: var(--map-ink-2); }
+.legend i { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; border-radius: 2px; }
+.legend i.dot { border-radius: 50%; }
+.maphint { position: absolute; left: 12px; bottom: 12px; z-index: 2; max-width: 280px; font-size: 12px; color: var(--map-ink-2); background: rgba(28, 33, 38, .85); padding: 6px 8px; border-radius: 2px; pointer-events: none; }
+.deck-tooltip { font: 13px/1.4 var(--body) !important; background: #0e1114 !important; color: #e6e9ec !important; padding: 6px 9px !important; border-radius: 2px; max-width: 260px; }
+
+.panel { padding: 18px 20px 22px; display: grid; gap: 22px; align-content: start; min-width: 0; border-left: 1px solid var(--rule); }
+.panel h2 { font-size: 34px; }
+.panel .where { color: var(--ink-2); margin-top: 2px; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--rule); }
+.fact { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--rule); }
+.fact:nth-child(even) { padding-left: 12px; border-left: 1px solid var(--rule); }
+.fact .num { font-size: 32px; font-weight: 700; line-height: 1; display: block; }
+.fact .lbl { font-size: 13px; color: var(--ink-2); }
+.fact.danger .num { color: var(--alert); }
+.panel h3 { font-size: 21px; margin-bottom: 8px; }
+.panel .note { font-size: 13px; color: var(--ink-2); margin: 6px 0 0; }
+
+.riskrow { display: grid; grid-template-columns: 112px minmax(0, 1fr) 56px; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.chip i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.chip small { font-weight: 400; color: var(--ink-2); font-size: 12px; display: block; }
+.stack { display: flex; height: 18px; background: var(--ground); border-radius: 2px; overflow: hidden; }
+.stack span { display: block; height: 100%; }
+.riskrow .n { text-align: right; font-family: var(--display); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.keys { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--ink-2); margin-top: 4px; }
+.keys i { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+
+.sev { display: flex; height: 22px; border-radius: 2px; overflow: hidden; }
+.sev span { display: block; height: 100%; }
+.sevkeys { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; font-size: 13px; margin-top: 6px; }
+.sevkeys i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; }
+.sevkeys b { font-variant-numeric: tabular-nums; }
+
+section.block { padding-block: 34px 8px; }
+section.block h2 { font-size: 30px; margin-bottom: 12px; }
+.tablewrap { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-weight: 600; color: var(--ink-2); font-size: 13px; vertical-align: bottom; }
+th:first-child, td:first-child { text-align: left; }
+td.hot { color: var(--alert); font-weight: 700; }
+tr.pending td { color: var(--ink-2); font-style: italic; }
+tbody tr { cursor: pointer; }
+tbody tr.pending { cursor: default; }
+
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; }
+.cols h3 { font-size: 20px; margin-bottom: 6px; }
+.cols p, .cols li { max-width: 64ch; }
+.cols ul { padding-left: 18px; margin: 0; display: grid; gap: 6px; }
+footer { padding-block: 30px 40px; color: var(--ink-2); font-size: 13px; }
+
+@media (max-width: 900px) {
+  .board { grid-template-columns: 1fr; }
+  .panel { border-left: 0; border-top: 1px solid var(--rule); }
+  #map { height: 460px; }
+  .totals { grid-template-columns: 1fr 1fr; }
+  .total:nth-child(2) { border-right: 0; }
+  .total:nth-child(3) { padding-left: 0; }
+  .total:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .cols { grid-template-columns: 1fr; }
+  .views { margin-left: 0; }
+}
+@media (max-width: 460px) {
+  .riskrow { grid-template-columns: 92px minmax(0, 1fr) 48px; }
+  .facts { grid-template-columns: 1fr; }
+  .fact:nth-child(even) { padding-left: 0; border-left: 0; }
+}
+</style>
+
+<div class="alert"><div class="wrap">
+  <strong>Parte de situación</strong>
+  <span>Incendios forestales en el Perú, focos del 14 al 21 de octubre de 2026</span>
+</div></div>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Los cinco distritos con más fuego de la semana</h1>
+    <p id="lede">Cargando cifras.</p>
+    <div class="totals" id="totals"></div>
+  </header>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Distritos"></nav>
+  <div class="board">
+    <div class="mapcol">
+      <div id="map" role="region" aria-label="Mapa de focos, áreas quemadas y casas">
+        <div class="maphint" id="maphint">Arrastre para mover y use la rueda para acercar. Pase el cursor sobre una casa o un foco para ver el detalle.</div>
+      </div>
+      <div class="mapbar">
+        <label><input type="checkbox" id="ly-dnbr" checked> Área quemada</label>
+        <label><input type="checkbox" id="ly-casas" checked> Casas por riesgo</label>
+        <label><input type="checkbox" id="ly-focos" checked> Focos de calor</label>
+        <span class="views">
+          <button type="button" class="view" id="vw-fuego" aria-pressed="true">Incendio principal</button>
+          <button type="button" class="view" id="vw-todo" aria-pressed="false">Todo el distrito</button>
+          <button type="button" class="view" id="vw-region" aria-pressed="false">Los cinco</button>
+        </span>
+      </div>
+      <div class="legend">
+        <span><i style="background:#67000d"></i>Quemado, severidad alta</span>
+        <span><i style="background:#d7301f"></i>Moderada alta</span>
+        <span><i style="background:#fe9929"></i>Moderada baja</span>
+        <span><i style="background:rgba(254,227,145,.6)"></i>Baja (no se suma)</span>
+        <span><i style="background:rgba(140,146,152,.45)"></i>Nubes o humo, sin dato</span>
+        <span><i class="dot" style="background:#ffd640"></i>Foco de calor VIIRS</span>
+        <span><i class="dot" style="background:#9fbaff"></i>Casa, riesgo muy alto</span>
+        <span><i class="dot" style="background:#5c84ee"></i>Casa, riesgo alto</span>
+        <span><i class="dot" style="background:#3a5293"></i>Casa, riesgo medio o bajo</span>
+      </div>
+    </div>
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </div>
+
+  <section class="block">
+    <h2>Comparación entre distritos</h2>
+    <div class="tablewrap"><table id="cmp"></table></div>
+  </section>
+
+  <section class="block">
+    <h2>Cómo se calculó</h2>
+    <div class="cols">
+      <div>
+        <h3>Qué distritos</h3>
+        <p>Los cinco con mayor huella de focos de calor VIIRS (satélites S-NPP, NOAA-20 y NOAA-21, NASA FIRMS) del 14 al 21 de octubre. La huella cuenta cada píxel de 375 m con fuego una sola vez, aunque lo detecten varios satélites.</p>
+        <h3>Cuánto se quemó</h3>
+        <p>Índice dNBR con Sentinel-2: la imagen de antes es la mediana sin nubes del 20 de septiembre al 13 de octubre; la de después, el último píxel sin nubes del 16 al 21 de octubre. Se cuenta como quemado un píxel con dNBR de 0,27 o más que además está a 1 km o menos de un foco de la semana. Así se dejan fuera quemas anteriores y cambios que no son fuego.</p>
+      </div>
+      <div>
+        <h3>Riesgo de las casas</h3>
+        <p>Edificaciones de Google y Microsoft Open Buildings. El riesgo depende de la distancia a lo quemado: muy alto a menos de 100 m, alto de 100 a 500 m, medio de 500 m a 1 km y bajo a más de 1 km. La cobertura que rodea cada casa (radio de 100 m, ESA WorldCover 2021) se reporta aparte.</p>
+        <h3>Límites</h3>
+        <ul>
+          <li>Un foco de calor no es un incendio: en Ucayali muchos son quemas para chacras.</li>
+          <li>Las nubes y el humo esconden el fuego. En Río Tambo falta un tercio de la zona, justo donde más arde.</li>
+          <li>Open Buildings no ve casas bajo árboles y no dice de qué material son.</li>
+          <li>WorldCover es de 2021: una chacra abierta después aparece como bosque.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Fuentes: NASA FIRMS (VIIRS 375 m), Sentinel-2 L2A, ESA WorldCover 2021 y Copernicus DEM vía Microsoft Planetary Computer, Google y Microsoft Open Buildings (VIDA, Source Cooperative), límites INEI (juaneladio/peru-geojson). Trabajo de clase, Diplomado QLAB 2026. No reemplaza los reportes del COEN, INDECI ni SERFOR.
+  </footer>
+</div>
+
+<script src="https://unpkg.com/deck.gl@9.0.38/dist.min.js"></script>
+<script>
+const ORDEN = [
+  ["rio_tambo", "Río Tambo"], ["nueva_requena", "Nueva Requena"], ["masisea", "Masisea"],
+  ["raymondi", "Raymondi"], ["tahuania", "Tahuania"],
+];
+const RIESGO = ["muy alto", "alto", "medio", "bajo"];
+const RIESGO_DIST = ["menos de 100 m", "100 a 500 m", "500 m a 1 km", "más de 1 km"];
+// colores fijos del mapa (siempre oscuro); el panel usa los tokens del tema
+const RIESGO_RGB = [[159, 186, 255], [92, 132, 238], [58, 82, 147], [58, 82, 147]];
+// amarillo para que el foco no se pierda sobre el naranja de lo quemado
+const FOCO_RGB = [255, 214, 64];
+const SEV = [["alta", "#67000d"], ["moderada alta", "#d7301f"], ["moderada baja", "#fe9929"], ["baja", "#fee391"]];
+const COB = [["bosque", "--cov-bosque"], ["pastizal", "--cov-pastizal"], ["urbano", "--cov-urbano"]];
+
+const fmt = n => n.toLocaleString("es-PE");
+const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+const $ = id => document.getElementById(id);
+
+const estado = { dnbr: true, casas: true, focos: true, actual: null, vista: "fuego" };
+let resumen, base, limites, focosPeru = [], distritos = {}, casas = [];
+
+const enPages = location.hostname.endsWith("github.io");
+const mapa = new deck.Deck({
+  parent: $("map"),
+  views: new deck.MapView({ repeat: false }),
+  initialViewState: { longitude: -74.6, latitude: -10.2, zoom: 6.2 },
+  controller: { dragRotate: false, touchRotate: false },
+  getTooltip: tooltip,
+  layers: [],
+});
+
+function tooltip({ object, layer }) {
+  if (!object) return null;
+  if (layer.id === "casas") {
+    const [, , r, , dist] = object;
+    return { text: `Casa · riesgo ${RIESGO[r]}\n${dist >= 99999 ? "lejos" : fmt(dist) + " m"} de lo quemado` };
+  }
+  if (layer.id === "focos") return { text: `Foco de calor\n${object[2]} de octubre` };
+  return null;
+}
+
+function capas() {
+  const L = [];
+  // mapa base con nombres de lugares: solo en GitHub Pages (el visor de Claude bloquea mosaicos externos)
+  if (enPages) {
+    L.push(new deck.TileLayer({
+      id: "carto", data: "https://basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png",
+      minZoom: 0, maxZoom: 16, tileSize: 256,
+      renderSubLayers: p => new deck.BitmapLayer(p, { data: null, image: p.data,
+        bounds: [p.tile.boundingBox[0][0], p.tile.boundingBox[0][1], p.tile.boundingBox[1][0], p.tile.boundingBox[1][1]] }),
+    }));
+  }
+  if (base) L.push(new deck.BitmapLayer({ id: "relieve", image: "data/relieve.png", bounds: base.relieve_bounds, opacity: enPages ? 0.75 : 1 }));
+  if (limites) {
+    L.push(new deck.GeoJsonLayer({ id: "prov", data: limites.provincias, stroked: true, filled: false,
+      getLineColor: [255, 255, 255, 28], lineWidthMinPixels: 0.6 }));
+    L.push(new deck.GeoJsonLayer({ id: "dep", data: limites.departamentos, stroked: true, filled: false,
+      getLineColor: [255, 255, 255, 80], lineWidthMinPixels: 1.2 }));
+  }
+  if (estado.dnbr) {
+    for (const d of Object.values(distritos)) for (const c of d.capas) {
+      const [[s, o], [n, e]] = c.bounds;
+      L.push(new deck.BitmapLayer({ id: c.img, image: c.img, bounds: [o, s, e, n],
+        textureParameters: { minFilter: "nearest", magFilter: "nearest" } }));
+    }
+  }
+  for (const [id, d] of Object.entries(distritos)) {
+    L.push(new deck.GeoJsonLayer({ id: "lim-" + id, data: d.limite, stroked: true, filled: false,
+      getLineColor: id === estado.actual ? [255, 255, 255, 200] : [255, 255, 255, 90],
+      lineWidthMinPixels: id === estado.actual ? 1.8 : 1, updateTriggers: { getLineColor: estado.actual } }));
+  }
+  if (estado.focos) {
+    L.push(new deck.ScatterplotLayer({ id: "focos", data: focosPeru, pickable: true,
+      getPosition: f => [f[0], f[1]], getRadius: 187, radiusUnits: "meters",
+      radiusMinPixels: 1.6, radiusMaxPixels: 4, getFillColor: [...FOCO_RGB, 210],
+      stroked: true, getLineColor: [20, 22, 25, 200], lineWidthMinPixels: 0.5 }));
+  }
+  if (estado.casas) {
+    L.push(new deck.ScatterplotLayer({ id: "casas", data: casas, pickable: true,
+      getPosition: c => [c[1], c[0]], getRadius: c => c[2] === 0 ? 30 : 22, radiusUnits: "meters",
+      radiusMinPixels: 1.8, radiusMaxPixels: 6, stroked: true, getLineColor: [14, 17, 20, 160], lineWidthMinPixels: 0.4, getFillColor: c => [...RIESGO_RGB[c[2]], c[2] > 1 ? 170 : 240] }));
+  }
+  if (limites) {
+    L.push(new deck.TextLayer({ id: "etiquetas", data: limites.etiquetas, getPosition: e => e.pos,
+      getText: e => e.nombre, getSize: 14, getColor: [230, 233, 236, 170], fontFamily: "Source Sans 3, sans-serif",
+      fontWeight: 600, characterSet: "auto", outlineWidth: 2, outlineColor: [28, 33, 38, 255],
+      fontSettings: { sdf: true } }));
+  }
+  return L;
+}
+const redibujar = () => mapa.setProps({ layers: capas() });
+
+function irA(bounds) {
+  const el = $("map");
+  const vp = new deck.WebMercatorViewport({ width: el.clientWidth, height: el.clientHeight });
+  const { longitude, latitude, zoom } = vp.fitBounds(bounds, { padding: 24 });
+  mapa.setProps({ initialViewState: { longitude, latitude, zoom: Math.min(zoom, 13.5),
+    transitionDuration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1200,
+    transitionInterpolator: new deck.FlyToInterpolator() } });
+}
+
+function cajas(d) {
+  let todo = null, principal = null, mayor = 0;
+  for (const c of d.capas) {
+    const [[s, o], [n, e]] = c.bounds;
+    todo = todo ? [[Math.min(todo[0][0], o), Math.min(todo[0][1], s)], [Math.max(todo[1][0], e), Math.max(todo[1][1], n)]] : [[o, s], [e, n]];
+    if ((n - s) * (e - o) > mayor) { mayor = (n - s) * (e - o); principal = [[o, s], [e, n]]; }
+  }
+  return { fuego: principal, todo };
+}
+
+function ver(cual) {
+  estado.vista = cual;
+  ["fuego", "todo", "region"].forEach(v => $("vw-" + v).setAttribute("aria-pressed", v === cual));
+  if (cual === "region") {
+    const todas = Object.values(distritos).map(d => cajas(d).todo);
+    const s = Math.min(...todas.map(b => b[0][1])), o = Math.min(...todas.map(b => b[0][0]));
+    const n = Math.max(...todas.map(b => b[1][1])), e = Math.max(...todas.map(b => b[1][0]));
+    return irA([[o, s], [e, n]]);
+  }
+  const d = distritos[estado.actual];
+  if (d) irA(cajas(d)[cual]);
+}
+
+for (const [k, id] of [["dnbr", "ly-dnbr"], ["casas", "ly-casas"], ["focos", "ly-focos"]]) {
+  $(id).addEventListener("change", e => { estado[k] = e.target.checked; redibujar(); });
+}
+["fuego", "todo", "region"].forEach(v => $("vw-" + v).addEventListener("click", () => ver(v)));
+$("map").addEventListener("pointerdown", () => { $("maphint").hidden = true; }, { once: true });
+
+function totales(ds) {
+  const s = k => ds.reduce((a, d) => a + d[k], 0);
+  const cerca = ds.reduce((a, d) => a + d.riesgo["muy alto"] + d.riesgo["alto"], 0);
+  const edif = s("edificaciones");
+  $("totals").innerHTML = [
+    [fmt(s("quemado_ha")), "hectáreas quemadas en la semana", true],
+    [fmt(cerca), `casas a menos de 500 m de lo quemado (${pct(cerca, edif)} % de las de la zona)`, true],
+    [fmt(s("dentro_quemado")), "casas dentro del área quemada", false],
+    [fmt(edif), "edificaciones en la zona del fuego", false],
+  ].map(([n, l, hot]) => `<div class="total${hot ? " danger" : ""}"><span class="num">${n}</span><span class="lbl">${l}</span></div>`).join("");
+
+  const top = [...ds].sort((a, b) => b.riesgo["muy alto"] - a.riesgo["muy alto"])[0];
+  const faltan = ORDEN.length - ds.length;
+  $("lede").textContent =
+    `Satélites de la NASA y de la ESA muestran ${fmt(s("quemado_ha"))} ha quemadas en ${ds.length === 5 ? "los cinco" : ds.length} distritos de la selva central y de Ucayali. ` +
+    `${top.distrito} tiene más casas pegadas al fuego: ${fmt(top.riesgo["muy alto"])} a menos de 100 m.` +
+    (faltan ? ` Faltan ${faltan} distritos por procesar; las cifras se actualizan cuando terminen.` : "");
+}
+
+function tabs(ds) {
+  $("tabs").innerHTML = ORDEN.map(([id, nombre], i) => {
+    const d = ds.find(x => x.id === id);
+    return `<button class="tab" role="tab" aria-selected="false" ${d ? "" : "disabled"} data-id="${id}"><span class="rk">${i + 1}.º en focos</span>${nombre}<span class="rk">${d ? fmt(d.quemado_ha) + " ha" : "en proceso"}</span></button>`;
+  }).join("");
+  $("tabs").addEventListener("click", e => {
+    const b = e.target.closest(".tab");
+    if (b && !b.disabled) elegir(b.dataset.id);
+  });
+}
+
+function panel(d) {
+  const riesgoMax = Math.max(...RIESGO.map(r => d.riesgo[r]));
+  const filas = RIESGO.map((r, i) => {
+    const pc = d.riesgo_por_cobertura[r] || {};
+    const otros = d.riesgo[r] - COB.reduce((a, [c]) => a + (pc[c] || 0), 0);
+    const w = n => (100 * n / riesgoMax).toFixed(2);
+    const segs = COB.map(([c, v]) => `<span style="width:${w(pc[c] || 0)}%;background:var(${v})" title="${c}: ${fmt(pc[c] || 0)}"></span>`).join("") +
+      `<span style="width:${w(otros)}%;background:var(--cov-otro)" title="otros: ${fmt(otros)}"></span>`;
+    return `<div class="riskrow"><span class="chip"><i style="background:var(--risk-${i + 1})"></i><span>${r[0].toUpperCase() + r.slice(1)}<small>${RIESGO_DIST[i]}</small></span></span><div class="stack">${segs}</div><span class="n">${fmt(d.riesgo[r])}</span></div>`;
+  }).join("");
+
+  const muy = d.riesgo["muy alto"], muyBosque = (d.riesgo_por_cobertura["muy alto"] || {}).bosque || 0;
+  const sevTotal = SEV.reduce((a, [k]) => a + d.severidad_ha[k], 0);
+  const cobTotal = Object.values(d.cobertura_quemada).reduce((a, b) => a + b, 0);
+  const cobOrden = Object.entries(d.cobertura_quemada).sort((a, b) => b[1] - a[1]);
+  const color = c => ({ bosque: "var(--cov-bosque)", pastizal: "var(--cov-pastizal)", urbano: "var(--cov-urbano)" }[c] || "var(--cov-otro)");
+
+  $("panel").innerHTML = `
+    <div><h2>${d.distrito}</h2><div class="where">${d.provincia}, ${d.departamento}</div></div>
+    <div class="facts">
+      <div class="fact danger"><span class="num">${fmt(d.quemado_ha)} ha</span><span class="lbl">quemadas (dNBR, a 1 km de un foco)</span></div>
+      <div class="fact danger"><span class="num">${fmt(muy)}</span><span class="lbl">casas a menos de 100 m del fuego</span></div>
+      <div class="fact"><span class="num">${fmt(d.focos)}</span><span class="lbl">focos de calor en 7 días</span></div>
+      <div class="fact"><span class="num">${d.sin_dato_pct.toLocaleString("es-PE")} %</span><span class="lbl">de la zona tapada por nubes o humo</span></div>
+    </div>
+    <div>
+      <h3>Casas por riesgo y lo que las rodea</h3>
+      ${filas}
+      <div class="keys">${COB.map(([c, v]) => `<span><i style="background:var(${v})"></i>${c}</span>`).join("")}<span><i style="background:var(--cov-otro)"></i>otros</span></div>
+      <p class="note">${pct(muyBosque, muy)} % de las casas en riesgo muy alto están rodeadas de bosque. Hay ${fmt(d.dentro_quemado)} dentro del área quemada.</p>
+    </div>
+    <div>
+      <h3>Qué se quemó</h3>
+      <div class="sev">${cobOrden.map(([c, ha]) => `<span style="width:${(100 * ha / cobTotal).toFixed(2)}%;background:${color(c)}" title="${c}: ${fmt(ha)} ha"></span>`).join("")}</div>
+      <div class="sevkeys">${cobOrden.slice(0, 4).map(([c, ha]) => `<span><i style="background:${color(c)}"></i>${c} <b>${fmt(ha)} ha</b> (${pct(ha, cobTotal)} %)</span>`).join("")}</div>
+    </div>
+    <div>
+      <h3>Severidad</h3>
+      <div class="sev">${SEV.map(([k, c]) => `<span style="width:${(100 * d.severidad_ha[k] / sevTotal).toFixed(2)}%;background:${c}" title="${k}: ${fmt(d.severidad_ha[k])} ha"></span>`).join("")}</div>
+      <div class="sevkeys">${SEV.map(([k, c]) => `<span><i style="background:${c}"></i>${k} <b>${fmt(d.severidad_ha[k])} ha</b></span>`).join("")}</div>
+      <p class="note">Sin el filtro de focos el dNBR marca ${fmt(d.quemado_sin_filtro_ha)} ha. La huella de los focos VIIRS suma ${fmt(d.huella_viirs_ha)} ha.</p>
+    </div>`;
+}
+
+function comparar(ds) {
+  const maxMuy = Math.max(...ds.map(x => x.riesgo["muy alto"]));
+  const fila = ([id, nombre]) => {
+    const d = ds.find(x => x.id === id);
+    if (!d) return `<tr class="pending"><td>${nombre}</td><td colspan="7">en proceso</td></tr>`;
+    return `<tr data-id="${id}"><td>${d.distrito} <span style="color:var(--ink-2)">${d.departamento}</span></td>
+      <td>${fmt(d.focos)}</td><td>${fmt(d.huella_viirs_ha)}</td><td>${fmt(d.quemado_ha)}</td>
+      <td>${d.sin_dato_pct.toLocaleString("es-PE")} %</td><td>${fmt(d.edificaciones)}</td>
+      <td class="${d.riesgo["muy alto"] === maxMuy ? "hot" : ""}">${fmt(d.riesgo["muy alto"])}</td>
+      <td>${fmt(d.riesgo["muy alto"] + d.riesgo["alto"])}</td></tr>`;
+  };
+  $("cmp").innerHTML = `<thead><tr><th>Distrito</th><th>Focos<br>7 días</th><th>Huella VIIRS<br>ha</th><th>Quemado<br>dNBR, ha</th><th>Sin dato<br>nubes, humo</th><th>Edificaciones<br>en la zona</th><th>Casas a<br>menos de 100 m</th><th>Casas a<br>menos de 500 m</th></tr></thead><tbody>${ORDEN.map(fila).join("")}</tbody>`;
+  $("cmp").addEventListener("click", e => {
+    const tr = e.target.closest("tr[data-id]");
+    if (tr) { elegir(tr.dataset.id); $("tabs").scrollIntoView({ behavior: "smooth" }); }
+  });
+}
+
+function elegir(id) {
+  estado.actual = id;
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", t.dataset.id === id));
+  panel(resumen.distritos.find(x => x.id === id));
+  redibujar();
+  ver(estado.vista === "region" ? "fuego" : estado.vista);
+}
+
+const json = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.json(); });
+
+json("data/resumen.json").then(async r => {
+  resumen = r;
+  const ds = r.distritos;
+  totales(ds); tabs(ds); comparar(ds);
+  [base, limites, focosPeru] = await Promise.all([json("data/base.json"), json("data/limites.json"), json("data/focos_peru.json")]);
+  const detalles = await Promise.all(ds.map(d => json(`data/${d.id}.json`)));
+  ds.forEach((d, i) => { distritos[d.id] = detalles[i]; });
+  // casas de menor riesgo primero, para que las de riesgo muy alto queden encima
+  casas = detalles.flatMap(d => d.edificaciones).sort((a, b) => b[2] - a[2]);
+  const pedido = location.hash.slice(1);
+  elegir(ds.some(d => d.id === pedido) ? pedido : ds[0].id);
+}).catch(() => {
+  $("lede").textContent = "No se pudieron leer los datos. Si abrió el archivo directo desde la carpeta, sírvalo con un servidor local (python -m http.server dentro de docs/).";
+});
+</script>

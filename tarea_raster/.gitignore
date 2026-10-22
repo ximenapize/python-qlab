@@ -1,0 +1,6 @@
+.venv/
+data/raw/
+data/processed/dnbr/
+__pycache__/
+.DS_Store
+docs/direction-approved.md

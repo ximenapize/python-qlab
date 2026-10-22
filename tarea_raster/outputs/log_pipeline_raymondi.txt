@@ -1,0 +1,33 @@
+     distrito  zona_ha  sin_dato_ha  quemado_sin_filtro_ha  quemado_sembrado_ha  baja_ha  moderada baja_ha  moderada alta_ha  alta_ha  sin_dato_pct
+    RIO TAMBO  72241.0      23889.0                 3409.0               1927.0   2233.0            1335.0             555.0     38.0          33.0
+NUEVA REQUENA  93340.0       1181.0                 4101.0               2092.0   3795.0            1598.0             412.0     81.0           1.0
+      MASISEA 100051.0      25971.0                 3246.0               1351.0   2254.0             831.0             365.0    155.0          26.0
+     RAYMONDI 108151.0      44682.0                 2436.0                942.0   1681.0             702.0             207.0     34.0          41.0
+RAYMONDI: 4,564 edificaciones en la zona del fuego
+              n  area_mediana_m2  confianza_media
+bf_source                                        
+google     3388            30.33             0.78
+microsoft  1176            35.30              NaN
+
+RAYMONDI · ¿qué se quemó? (dNBR sembrado, 942 ha)
+             ha   pct
+bosque    914.0  97.0
+pastizal   27.0   3.0
+agua        2.0   0.0
+
+Edificaciones: 4,564 · dentro de lo quemado (<= 20 m): 54
+Riesgo por distancia × cobertura dominante en 100 m:
+cobertura_100m  agua  bosque  pastizal  urbano  total
+riesgo                                               
+muy alto           0     366         9       0    375
+alto               4    1448        79       0   1531
+medio              4    1214       190       5   1413
+bajo               6    1047       132       0   1185
+total             14    4075       410       5   4504
+
+% de vegetación en 100 m (mediana) por riesgo:
+riesgo
+muy alto    100.0
+alto        100.0
+medio       100.0
+bajo        100.0

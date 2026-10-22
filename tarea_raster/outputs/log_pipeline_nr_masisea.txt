@@ -1,0 +1,69 @@
+     distrito  zona_ha  sin_dato_ha  quemado_sin_filtro_ha  quemado_sembrado_ha  baja_ha  moderada baja_ha  moderada alta_ha  alta_ha  sin_dato_pct
+    RIO TAMBO  72241.0      23889.0                 3409.0               1927.0   2233.0            1335.0             555.0     38.0          33.0
+NUEVA REQUENA  93340.0       1181.0                 4101.0               2092.0   3795.0            1598.0             412.0     81.0           1.0
+NUEVA REQUENA: 2,024 edificaciones en la zona del fuego
+              n  area_mediana_m2  confianza_media
+bf_source                                        
+google     1301            49.72             0.78
+microsoft   723            49.02              NaN
+
+NUEVA REQUENA · ¿qué se quemó? (dNBR sembrado, 2,092 ha)
+              ha   pct
+bosque    1974.0  94.0
+pastizal   103.0   5.0
+agua         9.0   0.0
+cultivo      6.0   0.0
+
+Edificaciones: 2,024 · dentro de lo quemado (<= 20 m): 11
+Riesgo por distancia × cobertura dominante en 100 m:
+cobertura_100m  agua  bosque  cultivo  pastizal  urbano  total
+riesgo                                                        
+muy alto           0      84        0         1       0     85
+alto              15     697        0        83       8    803
+medio              4     663        7       138      12    824
+bajo               0     248        1        63       0    312
+total             19    1692        8       285      20   2024
+
+% de vegetación en 100 m (mediana) por riesgo:
+riesgo
+muy alto    100.0
+alto         89.0
+medio        93.0
+bajo        100.0
+     distrito  zona_ha  sin_dato_ha  quemado_sin_filtro_ha  quemado_sembrado_ha  baja_ha  moderada baja_ha  moderada alta_ha  alta_ha  sin_dato_pct
+    RIO TAMBO  72241.0      23889.0                 3409.0               1927.0   2233.0            1335.0             555.0     38.0          33.0
+NUEVA REQUENA  93340.0       1181.0                 4101.0               2092.0   3795.0            1598.0             412.0     81.0           1.0
+      MASISEA 100051.0      25971.0                 3246.0               1351.0   2254.0             831.0             365.0    155.0          26.0
+MASISEA: 4,435 edificaciones en la zona del fuego
+              n  area_mediana_m2  confianza_media
+bf_source                                        
+google     3153            44.06             0.79
+microsoft  1282            54.10              NaN
+
+MASISEA · ¿qué se quemó? (dNBR sembrado, 1,351 ha)
+                   ha   pct
+bosque         1139.0  84.0
+pastizal        204.0  15.0
+agua              7.0   0.0
+humedal           0.0   0.0
+arbustal          0.0   0.0
+cultivo           0.0   0.0
+urbano            0.0   0.0
+suelo desnudo     0.0   0.0
+
+Edificaciones: 4,435 · dentro de lo quemado (<= 20 m): 51
+Riesgo por distancia × cobertura dominante en 100 m:
+cobertura_100m  agua  bosque  pastizal  urbano  total
+riesgo                                               
+muy alto           0     282       116       0    398
+alto               3    1034       335       0   1372
+medio              0     852       200     100   1152
+bajo               0     956       165     367   1488
+total              3    3124       816     467   4410
+
+% de vegetación en 100 m (mediana) por riesgo:
+riesgo
+muy alto    100.0
+alto        100.0
+medio        98.0
+bajo         85.0

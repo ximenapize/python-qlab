@@ -1,0 +1,340 @@
+{
+ "corte": "2026-10-21",
+ "ventana_focos": [
+  "2026-10-14",
+  "2026-10-21"
+ ],
+ "imagen_antes": "20 sep – 13 oct 2026 (mediana sin nubes)",
+ "imagen_despues": "16 – 21 oct 2026 (último píxel sin nubes)",
+ "distritos": [
+  {
+   "id": "rio_tambo",
+   "distrito": "Río Tambo",
+   "provincia": "Satipo",
+   "departamento": "Junín",
+   "rank": 1,
+   "huella_viirs_ha": 3670,
+   "focos": 457,
+   "frp_mw": 3367,
+   "quemado_ha": 1927,
+   "quemado_sin_filtro_ha": 3409,
+   "severidad_ha": {
+    "baja": 2233,
+    "moderada baja": 1335,
+    "moderada alta": 555,
+    "alta": 38
+   },
+   "sin_dato_pct": 33.1,
+   "zona_ha": 72241,
+   "cobertura_quemada": {
+    "bosque": 1846,
+    "pastizal": 62,
+    "agua": 9,
+    "cultivo": 5,
+    "suelo desnudo": 4
+   },
+   "edificaciones": 11610,
+   "dentro_quemado": 84,
+   "riesgo": {
+    "muy alto": 780,
+    "alto": 4225,
+    "medio": 3737,
+    "bajo": 2865
+   },
+   "riesgo_por_cobertura": {
+    "muy alto": {
+     "agua": 0,
+     "bosque": 621,
+     "pastizal": 139,
+     "urbano": 20
+    },
+    "alto": {
+     "agua": 1,
+     "bosque": 3223,
+     "pastizal": 621,
+     "urbano": 380
+    },
+    "medio": {
+     "agua": 26,
+     "bosque": 2851,
+     "pastizal": 678,
+     "urbano": 182
+    },
+    "bajo": {
+     "agua": 9,
+     "bosque": 2204,
+     "pastizal": 489,
+     "urbano": 163
+    }
+   },
+   "centro": [
+    -11.9143,
+    -73.986
+   ]
+  },
+  {
+   "id": "nueva_requena",
+   "distrito": "Nueva Requena",
+   "provincia": "Coronel Portillo",
+   "departamento": "Ucayali",
+   "rank": 2,
+   "huella_viirs_ha": 3516,
+   "focos": 415,
+   "frp_mw": 4027,
+   "quemado_ha": 2092,
+   "quemado_sin_filtro_ha": 4101,
+   "severidad_ha": {
+    "baja": 3795,
+    "moderada baja": 1598,
+    "moderada alta": 412,
+    "alta": 81
+   },
+   "sin_dato_pct": 1.3,
+   "zona_ha": 93340,
+   "cobertura_quemada": {
+    "bosque": 1974,
+    "pastizal": 103,
+    "agua": 9,
+    "cultivo": 6
+   },
+   "edificaciones": 2024,
+   "dentro_quemado": 11,
+   "riesgo": {
+    "muy alto": 85,
+    "alto": 803,
+    "medio": 824,
+    "bajo": 312
+   },
+   "riesgo_por_cobertura": {
+    "muy alto": {
+     "agua": 0,
+     "bosque": 84,
+     "cultivo": 0,
+     "pastizal": 1,
+     "urbano": 0
+    },
+    "alto": {
+     "agua": 15,
+     "bosque": 697,
+     "cultivo": 0,
+     "pastizal": 83,
+     "urbano": 8
+    },
+    "medio": {
+     "agua": 4,
+     "bosque": 663,
+     "cultivo": 7,
+     "pastizal": 138,
+     "urbano": 12
+    },
+    "bajo": {
+     "agua": 0,
+     "bosque": 248,
+     "cultivo": 1,
+     "pastizal": 63,
+     "urbano": 0
+    }
+   },
+   "centro": [
+    -8.2035,
+    -74.8472
+   ]
+  },
+  {
+   "id": "masisea",
+   "distrito": "Masisea",
+   "provincia": "Coronel Portillo",
+   "departamento": "Ucayali",
+   "rank": 3,
+   "huella_viirs_ha": 2911,
+   "focos": 283,
+   "frp_mw": 3540,
+   "quemado_ha": 1351,
+   "quemado_sin_filtro_ha": 3246,
+   "severidad_ha": {
+    "baja": 2254,
+    "moderada baja": 831,
+    "moderada alta": 365,
+    "alta": 155
+   },
+   "sin_dato_pct": 26.0,
+   "zona_ha": 100051,
+   "cobertura_quemada": {
+    "bosque": 1139,
+    "pastizal": 204,
+    "agua": 7,
+    "humedal": 0,
+    "arbustal": 0,
+    "cultivo": 0,
+    "urbano": 0,
+    "suelo desnudo": 0
+   },
+   "edificaciones": 4435,
+   "dentro_quemado": 51,
+   "riesgo": {
+    "muy alto": 398,
+    "alto": 1372,
+    "medio": 1152,
+    "bajo": 1488
+   },
+   "riesgo_por_cobertura": {
+    "muy alto": {
+     "agua": 0,
+     "bosque": 282,
+     "pastizal": 116,
+     "urbano": 0
+    },
+    "alto": {
+     "agua": 3,
+     "bosque": 1034,
+     "pastizal": 335,
+     "urbano": 0
+    },
+    "medio": {
+     "agua": 0,
+     "bosque": 852,
+     "pastizal": 200,
+     "urbano": 100
+    },
+    "bajo": {
+     "agua": 0,
+     "bosque": 956,
+     "pastizal": 165,
+     "urbano": 367
+    }
+   },
+   "centro": [
+    -8.6961,
+    -74.2724
+   ]
+  },
+  {
+   "id": "raymondi",
+   "distrito": "Raymondi",
+   "provincia": "Atalaya",
+   "departamento": "Ucayali",
+   "rank": 4,
+   "huella_viirs_ha": 2348,
+   "focos": 225,
+   "frp_mw": 2243,
+   "quemado_ha": 942,
+   "quemado_sin_filtro_ha": 2436,
+   "severidad_ha": {
+    "baja": 1681,
+    "moderada baja": 702,
+    "moderada alta": 207,
+    "alta": 34
+   },
+   "sin_dato_pct": 41.3,
+   "zona_ha": 108151,
+   "cobertura_quemada": {
+    "bosque": 914,
+    "pastizal": 27,
+    "agua": 2
+   },
+   "edificaciones": 4564,
+   "dentro_quemado": 54,
+   "riesgo": {
+    "muy alto": 375,
+    "alto": 1531,
+    "medio": 1413,
+    "bajo": 1185
+   },
+   "riesgo_por_cobertura": {
+    "muy alto": {
+     "agua": 0,
+     "bosque": 366,
+     "pastizal": 9,
+     "urbano": 0
+    },
+    "alto": {
+     "agua": 4,
+     "bosque": 1448,
+     "pastizal": 79,
+     "urbano": 0
+    },
+    "medio": {
+     "agua": 4,
+     "bosque": 1214,
+     "pastizal": 190,
+     "urbano": 5
+    },
+    "bajo": {
+     "agua": 6,
+     "bosque": 1047,
+     "pastizal": 132,
+     "urbano": 0
+    }
+   },
+   "centro": [
+    -10.675,
+    -73.9937
+   ]
+  },
+  {
+   "id": "tahuania",
+   "distrito": "Tahuania",
+   "provincia": "Atalaya",
+   "departamento": "Ucayali",
+   "rank": 5,
+   "huella_viirs_ha": 2222,
+   "focos": 294,
+   "frp_mw": 8374,
+   "quemado_ha": 649,
+   "quemado_sin_filtro_ha": 1437,
+   "severidad_ha": {
+    "baja": 1022,
+    "moderada baja": 459,
+    "moderada alta": 177,
+    "alta": 13
+   },
+   "sin_dato_pct": 35.2,
+   "zona_ha": 56727,
+   "cobertura_quemada": {
+    "bosque": 580,
+    "pastizal": 66,
+    "agua": 2,
+    "humedal": 0,
+    "arbustal": 0
+   },
+   "edificaciones": 1940,
+   "dentro_quemado": 17,
+   "riesgo": {
+    "muy alto": 144,
+    "alto": 855,
+    "medio": 680,
+    "bajo": 261
+   },
+   "riesgo_por_cobertura": {
+    "muy alto": {
+     "agua": 0,
+     "bosque": 116,
+     "pastizal": 28,
+     "urbano": 0
+    },
+    "alto": {
+     "agua": 2,
+     "bosque": 680,
+     "pastizal": 111,
+     "urbano": 62
+    },
+    "medio": {
+     "agua": 0,
+     "bosque": 581,
+     "pastizal": 33,
+     "urbano": 66
+    },
+    "bajo": {
+     "agua": 4,
+     "bosque": 219,
+     "pastizal": 19,
+     "urbano": 19
+    }
+   },
+   "centro": [
+    -9.9956,
+    -73.9496
+   ]
+  }
+ ]
+}

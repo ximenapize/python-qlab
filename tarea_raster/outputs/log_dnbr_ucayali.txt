@@ -1,0 +1,36 @@
+  parte 20/20 · 8,428 ha de zona
+
+NUEVA REQUENA · zona 93,340 ha · sin dato 1 %
+  no quemado         78,396 ha
+  baja                9,661 ha
+  moderada baja       3,350 ha
+  moderada alta         640 ha
+  alta                  111 ha
+  QUEMADO (dNBR >= 0,27): 4,101 ha
+  parte 40/40 · 1,887 ha de zona
+
+MASISEA · zona 100,051 ha · sin dato 26 %
+  no quemado         64,499 ha
+  baja                6,335 ha
+  moderada baja       2,397 ha
+  moderada alta         625 ha
+  alta                  224 ha
+  QUEMADO (dNBR >= 0,27): 3,246 ha
+  parte 45/45 · 2,327 ha de zona
+
+RAYMONDI · zona 108,151 ha · sin dato 41 %
+  no quemado         56,460 ha
+  baja                4,572 ha
+  moderada baja       1,933 ha
+  moderada alta         459 ha
+  alta                   44 ha
+  QUEMADO (dNBR >= 0,27): 2,436 ha
+  parte 22/22 · 2,310 ha de zona
+
+TAHUANIA · zona 56,727 ha · sin dato 35 %
+  no quemado         32,804 ha
+  baja                2,545 ha
+  moderada baja       1,091 ha
+  moderada alta         318 ha
+  alta                   28 ha
+  QUEMADO (dNBR >= 0,27): 1,437 ha
