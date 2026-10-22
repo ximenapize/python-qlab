@@ -229,7 +229,7 @@ footer { padding-block: 30px 40px; color: var(--ink-2); font-size: 13px; }
   </section>
 
   <footer>
-    Fuentes: NASA FIRMS (VIIRS 375 m), Sentinel-2 L2A, ESA WorldCover 2021 y Copernicus DEM vía Microsoft Planetary Computer, Google y Microsoft Open Buildings (VIDA, Source Cooperative), límites INEI (juaneladio/peru-geojson). Trabajo de clase, Diplomado QLAB 2026. No reemplaza los reportes del COEN, INDECI ni SERFOR.
+    Fuentes: NASA FIRMS (VIIRS 375 m), Sentinel-2 L2A, ESA WorldCover 2021 y Copernicus DEM vía Microsoft Planetary Computer, Google y Microsoft Open Buildings (VIDA, Source Cooperative), límites INEI (juaneladio/peru-geojson). Mapa base en GitHub Pages: Esri, HERE, Garmin, © colaboradores de OpenStreetMap. Trabajo de clase, Diplomado QLAB 2026. No reemplaza los reportes del COEN, INDECI ni SERFOR.
   </footer>
 </div>
 
@@ -278,15 +278,8 @@ function tooltip({ object, layer }) {
 function capas() {
   const L = [];
   // mapa base con nombres de lugares: solo en GitHub Pages (el visor de Claude bloquea mosaicos externos)
-  if (enPages) {
-    L.push(new deck.TileLayer({
-      id: "carto", data: "https://basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png",
-      minZoom: 0, maxZoom: 16, tileSize: 256,
-      renderSubLayers: p => new deck.BitmapLayer(p, { data: null, image: p.data,
-        bounds: [p.tile.boundingBox[0][0], p.tile.boundingBox[0][1], p.tile.boundingBox[1][0], p.tile.boundingBox[1][1]] }),
-    }));
-  }
-  if (base) L.push(new deck.BitmapLayer({ id: "relieve", image: "data/relieve.png", bounds: base.relieve_bounds, opacity: enPages ? 0.75 : 1 }));
+  if (enPages) L.push(mosaico("esri-base", "Canvas/World_Dark_Gray_Base"));
+  if (base) L.push(new deck.BitmapLayer({ id: "relieve", image: "data/relieve.png", bounds: base.relieve_bounds, opacity: enPages ? 0.55 : 1 }));
   if (limites) {
     L.push(new deck.GeoJsonLayer({ id: "prov", data: limites.provincias, stroked: true, filled: false,
       getLineColor: [255, 255, 255, 28], lineWidthMinPixels: 0.6 }));
@@ -316,6 +309,7 @@ function capas() {
       getPosition: c => [c[1], c[0]], getRadius: c => c[2] === 0 ? 30 : 22, radiusUnits: "meters",
       radiusMinPixels: 1.8, radiusMaxPixels: 6, stroked: true, getLineColor: [14, 17, 20, 160], lineWidthMinPixels: 0.4, getFillColor: c => [...RIESGO_RGB[c[2]], c[2] > 1 ? 170 : 240] }));
   }
+  if (enPages) L.push(mosaico("esri-nombres", "Canvas/World_Dark_Gray_Reference"));
   if (limites) {
     L.push(new deck.TextLayer({ id: "etiquetas", data: limites.etiquetas, getPosition: e => e.pos,
       getText: e => e.nombre, getSize: 14, getColor: [230, 233, 236, 170], fontFamily: "Source Sans 3, sans-serif",
@@ -325,6 +319,16 @@ function capas() {
   return L;
 }
 const redibujar = () => mapa.setProps({ layers: capas() });
+
+// mosaicos de Esri: no piden clave (CARTO ahora sí)
+function mosaico(id, servicio) {
+  return new deck.TileLayer({
+    id, data: `https://services.arcgisonline.com/ArcGIS/rest/services/${servicio}/MapServer/tile/{z}/{y}/{x}`,
+    minZoom: 0, maxZoom: 16, tileSize: 256,
+    renderSubLayers: p => new deck.BitmapLayer(p, { data: null, image: p.data,
+      bounds: [p.tile.boundingBox[0][0], p.tile.boundingBox[0][1], p.tile.boundingBox[1][0], p.tile.boundingBox[1][1]] }),
+  });
+}
 
 function irA(bounds) {
   const el = $("map");
