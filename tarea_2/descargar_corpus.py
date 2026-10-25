@@ -77,7 +77,8 @@ DOCUMENTOS = [
     ("foto", "Cartel pantanos 2.jpg", "Cartel de los pantanos"),
     ("foto", "Menu Levaggi 09052010.jpg", "Pizarra de menú escrita con tiza (Levaggi, Lince)"),
     ("foto", "Placa Calle Capon.jpg", "Placa de la Calle Capón, Barrio Chino de Lima"),
-    ("foto", "Cartel Picante de cuy.JPG", "Cartel pintado a mano en Ingenio, Junín"),
+    # reemplaza a «Cartel Picante de cuy.JPG»: PaddleOCR no detectó ninguna línea (ver 01_extraccion.ipynb)
+    ("foto", "Cartel - Plaza de los Peregrinos.jpg", "Cartel bilingüe de la Plaza de los Peregrinos, Pachacámac"),
     # manuscritos
     ("manuscrito", "La Púrpura de la Rosa.jpg", "Partitura manuscrita de La púrpura de la rosa (1701)"),
     ("manuscrito", "Alma matinal.jpg", "Manuscrito de Alma matinal, José Carlos Mariátegui"),

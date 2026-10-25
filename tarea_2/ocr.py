@@ -1,6 +1,7 @@
 """OCR de los 25 documentos con PaddleOCR (Sesión 10). Lo usa 01_extraccion.ipynb.
 
-    .venv/bin/python ocr.py          # procesa los documentos de datos/fuentes.csv que falten
+    .venv/bin/python ocr.py                    # procesa los documentos de datos/fuentes.csv que falten
+    .venv/bin/python ocr.py --rehacer doc_016  # vuelve a procesar esos documentos (p. ej., si se reemplazó la imagen)
 
 Configuración (la misma para todos los documentos, sin ajustes por documento):
 - PaddleOCR 3.7, motor PaddlePaddle en CPU, lang="es" -> PP-OCRv6_medium_det + PP-OCRv6_medium_rec.
@@ -71,6 +72,8 @@ def leer(ruta: Path, ocr) -> dict:
 def guardar_recortes(ruta: Path, resultado: dict):
     destino = RECORTES / ruta.stem
     destino.mkdir(parents=True, exist_ok=True)
+    for viejo in destino.glob("linea_*.jpg"):   # recortes de una corrida anterior
+        viejo.unlink()
     im = Image.open(ruta).convert("RGB")
     for i, linea in enumerate(resultado["lineas"]):
         x0, y0, x1, y1 = linea["caja"]
@@ -78,13 +81,13 @@ def guardar_recortes(ruta: Path, resultado: dict):
             im.crop((x0, y0, x1, y1)).save(destino / f"linea_{i:03d}.jpg", quality=90)
 
 
-def procesar(rutas: list[Path], ocr=None) -> dict[str, dict]:
-    """OCR de cada ruta, usando el respaldo JSON cuando ya existe."""
+def procesar(rutas: list[Path], ocr=None, rehacer: set[str] = frozenset()) -> dict[str, dict]:
+    """OCR de cada ruta, usando el respaldo JSON cuando ya existe (salvo los ids en `rehacer`)."""
     CRUDO.mkdir(parents=True, exist_ok=True)
     salida = {}
     for ruta in rutas:
         json_ruta = CRUDO / f"{ruta.stem}.json"
-        if json_ruta.exists():
+        if json_ruta.exists() and ruta.stem not in rehacer:
             salida[ruta.stem] = json.loads(json_ruta.read_text(encoding="utf-8"))
             continue
         ocr = ocr or crear_ocr()
@@ -103,9 +106,13 @@ def texto(resultado: dict) -> str:
 
 
 if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--rehacer", nargs="*", default=[], help="ids a procesar de nuevo aunque ya tengan JSON")
+    args = ap.parse_args()
     fuentes = pd.read_csv(CARPETA / "datos" / "fuentes.csv")
     docs = fuentes[fuentes["modalidad"] == "documento"]
-    resultados = procesar([CARPETA / a for a in docs["archivo"]])
+    resultados = procesar([CARPETA / a for a in docs["archivo"]], rehacer=set(args.rehacer))
     tabla = pd.DataFrame([{"id": k, "lineas": len(v["lineas"]), "caracteres": len(texto(v)),
                            "conf_media": np.mean([l["confianza"] for l in v["lineas"]]) if v["lineas"] else None,
                            "segundos": v["segundos"]} for k, v in resultados.items()])
