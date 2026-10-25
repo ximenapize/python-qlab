@@ -1,0 +1,31 @@
+# Entorno de los notebooks (OCR + ASR). Probado con Python 3.12 en macOS arm64.
+#   python3.12 -m venv .venv && .venv/bin/pip install -r requirements-pipeline.txt
+# La app de Streamlit usa requirements.txt, mucho más liviano.
+
+# OCR (Sesión 10)
+paddleocr==3.7.0
+paddlepaddle==3.3.1
+
+# ASR, VAD y diarización (Sesión 13)
+faster-whisper==1.2.1
+ctranslate2==4.8.3
+av==19.0.2
+pyannote-audio==4.0.7
+torch==2.14.1
+torchaudio==2.11.0
+scikit-learn==1.9.1
+
+# Datos, audio y métricas
+numpy==2.3.5
+pandas==3.1.0
+scipy==1.18.1
+soundfile==0.14.0
+pillow==13.0.0
+requests==2.34.2
+rapidfuzz==3.14.6
+jiwer==4.0.0
+
+# Notebooks y gráficos
+plotly==7.1.0
+nbformat==5.11.1
+ipykernel==7.4.0
