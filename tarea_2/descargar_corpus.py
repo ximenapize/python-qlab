@@ -84,14 +84,15 @@ DOCUMENTOS = [
 ]
 
 # Manuscrito fuera de Commons: Archivo José Carlos Mariátegui. Se baja el PDF y se usa la página 1.
-# Su robots.txt pide 10 s entre peticiones. Condición de acceso declarada: «De libre descarga y
-# visualización»; no tiene licencia abierta explícita, así que la imagen no se publica en la app.
+# Su robots.txt pide 10 s entre peticiones. La carta es de dominio público (Mariátegui murió en
+# 1930; en Perú los derechos duran 70 años tras la muerte) y el archivo la declara «De libre
+# descarga y visualización».
 MARIATEGUI = {
     "descripcion": "Carta de José Carlos Mariátegui a Victoria Ferrer, Roma, 24-1-1920 (p. 1)",
     "fuente_url": "https://archivo.mariategui.org/index.php/carta-a-victoria-ferrer-24-1-1920",
     "pdf": "https://archivo.mariategui.org/uploads/r/archivo-jose-carlos-mariategui/b/7/7/"
            "b779fc8a5dd1103299fa2ab2b5fbd3171de3c01c445bb2894538fdbc99a4c3f5/C-1920-1-24.pdf",
-    "licencia": "Libre descarga y visualización (Archivo José Carlos Mariátegui); sin licencia abierta explícita",
+    "licencia": "Dominio público; libre descarga según el Archivo José Carlos Mariátegui",
     "autor": "José Carlos Mariátegui; digitalización del Archivo José Carlos Mariátegui",
     "pausa": 10,
 }
