@@ -1,0 +1,23 @@
+# Corpus crudo y salidas pesadas (no se versionan)
+datos/raw/
+
+# Pesos de modelos
+modelos/*.safetensors
+modelos/*.bin
+modelos/*.pt
+modelos/*.onnx
+modelos/checkpoint-*/
+
+# Audio original fuera de ejemplos/
+*.wav
+*.flac
+*.mp3
+!datos/ejemplos/**
+
+# Entornos, cachés y credenciales
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.env
+.streamlit/secrets.toml
+.DS_Store
