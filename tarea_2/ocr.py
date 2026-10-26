@@ -95,7 +95,9 @@ def procesar(rutas: list[Path], ocr=None, rehacer: set[str] = frozenset()) -> di
         resultado["modelo_ocr"] = descripcion_modelo()
         json_ruta.write_text(json.dumps(resultado, ensure_ascii=False, indent=1), encoding="utf-8")
         guardar_recortes(ruta, resultado)
-        print(f"  {ruta.stem}: {len(resultado['lineas'])} líneas en {resultado['segundos']} s", flush=True)
+        conf = np.mean([l["confianza"] for l in resultado["lineas"]]) if resultado["lineas"] else float("nan")
+        print(f"  {ruta.stem}: {len(resultado['lineas']):3d} líneas · confianza media {conf:.2f} · "
+              f"{resultado['segundos']:6.1f} s", flush=True)
         salida[ruta.stem] = resultado
     return salida
 
