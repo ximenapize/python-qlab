@@ -13,8 +13,10 @@ duracion_seg). Va en datos/raw/ porque el texto aún no está seudonimizado.
 from __future__ import annotations
 
 import os
+import re
 import sys
 import time
+import unicodedata
 from pathlib import Path
 
 import numpy as np
@@ -114,6 +116,57 @@ def asr_qwen3(rutas: list[Path]) -> list[tuple[str, float]]:
         texto = " ".join(t for t in (una(x[s["start"]:s["end"]]) for s in tramos) if t)
         salida.append((texto, round(time.perf_counter() - t0, 2)))
     return salida
+
+
+# ───────────────────────────────────────────────────────── métricas
+
+REFERENCIAS = CARPETA / "datos" / "raw" / "referencias_manuales.xlsx"
+MARCAS = re.compile(r"\[(?:HABLANTE|PERSONA)_\d+\]|\[(?:USUARIO|DNI|TELEFONO|inaudible|ilegible)\]", re.IGNORECASE)
+
+
+def normalizar(texto) -> str:
+    """El mismo criterio para referencias y predicciones (como voz.normalizar de la Sesión 13):
+    sin marcas [HABLANTE_N] ni otras marcas entre corchetes, minúsculas, sin puntuación y con los
+    espacios y saltos de línea colapsados. Las tildes y la ñ se conservan."""
+    texto = "" if texto is None or (isinstance(texto, float) and np.isnan(texto)) else str(texto)
+    texto = unicodedata.normalize("NFC", MARCAS.sub(" ", texto).lower())
+    texto = re.sub(r"[^\w\s']", " ", texto)
+    return re.sub(r"\s+", " ", texto).strip()
+
+
+def leer_referencias() -> pd.DataFrame:
+    r = pd.read_excel(REFERENCIAS, sheet_name="referencias")
+    return r[["id", "modalidad", "texto_referencia"]].assign(texto_referencia=lambda d: d["texto_referencia"].fillna("").astype(str))
+
+
+def errores(predicciones: pd.DataFrame, referencias: pd.DataFrame) -> pd.DataFrame:
+    """Error por archivo: CER en documentos, WER en audio (también se calcula el otro como dato extra)."""
+    import jiwer
+    ref = dict(zip(referencias["id"], referencias["texto_referencia"].map(normalizar)))
+    filas = []
+    for f in predicciones.itertuples():
+        r, h = ref[f.id], normalizar(f.texto) or "∅"
+        filas.append({"id": f.id, "modalidad": f.modalidad, "modelo": f.modelo,
+                      "cer": jiwer.cer(r, h), "wer": jiwer.wer(r, h),
+                      "caracteres_ref": len(r), "palabras_ref": len(r.split()),
+                      "palabras_pred": len(normalizar(f.texto).split()),
+                      "segundos": f.segundos, "duracion_seg": f.duracion_seg})
+    return pd.DataFrame(filas)
+
+
+def resumen(err: pd.DataFrame) -> pd.DataFrame:
+    """Métrica agregada por modelo (sobre todo el texto de la muestra, no promedio de archivos):
+    CER = errores de caracteres / caracteres de referencia; WER = errores de palabras / palabras de referencia."""
+    import jiwer
+    filas = []
+    for (modalidad, modelo), g in err.groupby(["modalidad", "modelo"], sort=False):
+        filas.append({"modalidad": modalidad, "modelo": modelo, "papel": MODELOS[modelo][2],
+                      "metrica": "CER" if modalidad == "documento" else "WER",
+                      "valor": (g["cer"] * g["caracteres_ref"]).sum() / g["caracteres_ref"].sum() if modalidad == "documento"
+                      else (g["wer"] * g["palabras_ref"]).sum() / g["palabras_ref"].sum(),
+                      "segundos": g["segundos"].sum(), "segundos_por_archivo": g["segundos"].mean(),
+                      "factor_tiempo_real": g["segundos"].sum() / g["duracion_seg"].sum() if modalidad == "audio" else None})
+    return pd.DataFrame(filas)
 
 
 MODELOS = {
