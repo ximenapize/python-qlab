@@ -2,7 +2,7 @@
 
 **Pregunta guía:** ¿podemos convertir documentos escaneados y entrevistas en audio peruanos en un archivo de texto estructurado y buscable?
 
-**Dashboard público:** _(pegar aquí el enlace de Streamlit Community Cloud)_ → `https://…streamlit.app`
+**Dashboard público:** _ https://transcripcion-documentos-audios-peruanos.streamlit.app/
 
 Tarea 2 del curso Data Science con Python ([enunciado](https://github.com/d2cml-ai/Data-Science-Python/issues/190)). Trabajo individual de Ximena Pinillos.
 
