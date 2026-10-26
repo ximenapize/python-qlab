@@ -1,0 +1,21 @@
+id,modalidad,estrato,descripcion,archivo_evaluacion,recorte
+doc_005,documento,impreso,Portada del Mercurio Peruano,datos/raw/documentos/doc_005.jpg,página completa
+doc_006,documento,impreso,"Portada de la revista Amauta, n.º 1 (1926)",datos/raw/documentos/doc_006.jpg,página completa
+doc_004,documento,impreso,"Mercurio Peruano (1791), «Carta sobre los maricones», p. 3",datos/raw/documentos/doc_004.jpg,página completa
+doc_013,documento,foto,Cartel de los pantanos,datos/raw/documentos/doc_013.jpg,página completa
+doc_014,documento,foto,"Pizarra de menú escrita con tiza (Levaggi, Lince)",datos/raw/documentos/doc_014.jpg,página completa
+doc_012,documento,foto,"Cartel de Pueblo Viejo, Islay",datos/raw/documentos/doc_012.jpg,página completa
+doc_024,documento,manuscrito,Manuscrito fotografiado por la autora,datos/raw/documentos/doc_024.jpg,página completa
+doc_020,documento,manuscrito,Manuscrito fotografiado por la autora,datos/raw/documentos/doc_020.jpg,página completa
+doc_025,documento,manuscrito,Manuscrito fotografiado por la autora,datos/raw/documentos/doc_025.jpg,página completa
+doc_022,documento,manuscrito,Manuscrito fotografiado por la autora,datos/raw/documentos/doc_022.jpg,página completa
+clip_022,audio,lectura en estudio (OpenSLR 73),"Frase leída, hombre (pem_08784_00433368755)",datos/raw/audio/clip_022.wav,completo (11 s)
+clip_023,audio,lectura en estudio (OpenSLR 73),"Frase leída, hombre (pem_07508_00996076968)",datos/raw/audio/clip_023.wav,completo (9 s)
+clip_021,audio,lectura en estudio (OpenSLR 73),"Frase leída, mujer (pef_09334_01391718081)",datos/raw/audio/clip_021.wav,completo (7 s)
+clip_015,audio,calle o marcha,"Entrevistas en una marcha, UNMSM (2023)",datos/raw/audio/evaluacion/clip_015_primeros_60s.wav,primeros 60 s de 95 s
+clip_001,audio,calle o marcha,"Entrevista en la calle a una vendedora de frutas, El Agustino (2022)",datos/raw/audio/evaluacion/clip_001_primeros_60s.wav,primeros 60 s de 136 s
+clip_008,audio,testimonio,"Testimonio sobre salas de cine, WikiAcción Perú (2026)",datos/raw/audio/evaluacion/clip_008_primeros_60s.wav,primeros 60 s de 87 s
+clip_005,audio,testimonio,Testimonio de una lideresa campesina de Junín (2024),datos/raw/audio/evaluacion/clip_005_primeros_60s.wav,primeros 60 s de 527 s
+clip_003,audio,conferencia de prensa,Dirigente de Fenmucarinap en conferencia de prensa (2022),datos/raw/audio/evaluacion/clip_003_primeros_60s.wav,primeros 60 s de 251 s
+clip_012,audio,entrevista de estudiante (UNMSM),Entrevista registrada por un estudiante de la UNMSM (2022),datos/raw/audio/evaluacion/clip_012_primeros_60s.wav,primeros 60 s de 164 s
+clip_016,audio,fiesta patronal (Áncash),Entrevista sobre la fiesta de la Santísima Trinidad (2024),datos/raw/audio/evaluacion/clip_016_primeros_60s.wav,primeros 60 s de 98 s
