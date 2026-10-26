@@ -34,13 +34,15 @@ Fecha de extracción de todo el corpus: **25 de octubre de 2026**. La atribució
 | Modalidad | Línea base | Alternativos | Elegido |
 |---|---|---|---|
 | Documentos (CER, 10 docs) | PaddleOCR **0,17** | Tesseract 0,36 | PaddleOCR |
-| Audio (WER, 10 clips de hasta 60 s) | faster-whisper small 0,39 (factor de tiempo real 0,36) | Qwen3-ASR 0,41 (0,16 con GPU) · Whisper turbo **0,37** (1,08) | Whisper turbo |
+| Audio (WER, 10 clips de hasta 60 s) | faster-whisper small 0,39 (factor de tiempo real ≈ 0,4–0,5) | Qwen3-ASR 0,41 (≈ 0,2, con GPU) · Whisper turbo **0,37** (≈ 0,9–1,1) | Whisper turbo |
 
-Acuerdo LLM-humano: _x_/20 extracciones completamente correctas (ver `02_evaluacion.ipynb`).
+**Acuerdo LLM-humano: 13/20** extracciones completamente correctas (7/10 documentos y 6/10 audios). Todos los campos son correctos en el 80–90 % de los casos; los errores se concentran donde el OCR o el ASR ya habían fallado (la partitura de 1701 y las entrevistas de la fiesta con música).
+
+**Para la entrega:** `WER: 0.37 | CER: 0.17 | Acuerdo LLM-Humano: 13/20`
 
 ### Dos hallazgos
 
-1. **En documentos, la letra a mano separa a los modelos.** En impresos y carteles los dos OCR rinden parecido; en los manuscritos fotografiados PaddleOCR mantiene un CER de 0,16–0,34 y Tesseract sube a 0,44–0,99. Por eso PaddleOCR equivoca la mitad de caracteres en total, aunque es unas 28 veces más lento (≈28 s por página en CPU). El peor documento para ambos es una pizarra de menú escrita con tiza (CER ≈ 0,66).
+1. **En documentos, la letra a mano separa a los modelos.** En impresos y carteles los dos OCR rinden parecido; en los manuscritos fotografiados PaddleOCR mantiene un CER de 0,16–0,34 y Tesseract sube a 0,44–0,99. Por eso PaddleOCR equivoca la mitad de caracteres en total, aunque es unas 20 veces más lento (≈28 s por página en CPU, contra 1–1,5 s). El peor documento para ambos es una pizarra de menú escrita con tiza (CER ≈ 0,66).
 2. **En audio, la condición de grabación pesa más que el modelo, y el VAD puede borrar voz real.** Los tres ASR quedan a menos de 5 puntos de WER entre sí. En cambio, una misma herramienta va de WER ≈ 0 en lecturas de estudio a ≈ 0,35 en entrevistas en la calle, y a ≈ 0,85–0,92 en una fiesta patronal con música. Ahí el VAD solo detectó voz en el 18 % del recorte, y el modelo nunca recibió el 78 % de las palabras.
 
 ### Dos limitaciones
