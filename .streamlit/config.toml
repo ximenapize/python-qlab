@@ -1,0 +1,12 @@
+# Tema de la app de la Tarea 2 (tarea_2/app.py). Streamlit Community Cloud solo lee este archivo
+# en la raíz del repositorio, aunque la app esté en una subcarpeta.
+[theme]
+base = "light"
+primaryColor = "#9b1c1c"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f2f1ed"
+textColor = "#111111"
+font = "serif"
+headingFont = "serif"
+baseRadius = "none"
+borderColor = "#d9d6cf"
